@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffffff"
+    >
+
+    <TextView
+        android:id="@+id/matching_time"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Time"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="5%"/>
+
+    <TextView
+        android:id="@+id/matching_score"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_toRightOf="@id/matching_time"
+        android:text="Score"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_widthPercent="50%"
+        app:layout_heightPercent="5%"/>
+
+    <GridView
+        android:id="@+id/matching_game"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/matching_time"
+        android:gravity="center"
+        app:layout_widthPercent="100%"
+        app:layout_heightPercent="95%"/>
+
+</android.support.percent.PercentRelativeLayout>

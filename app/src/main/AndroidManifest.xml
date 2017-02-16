@@ -24,7 +24,9 @@
         </activity>
         <activity android:name=".StudysetViewActivity" />
         <activity android:name=".CardViewActivity" />
-        <activity android:name=".StudyViewAcitivity"></activity>
+        <activity android:name=".StudyViewAcitivity" />
+        <activity android:name=".GameOptionViewActivity" />
+        <activity android:name=".MatchingGameViewActivity"></activity>
     </application>
 
 </manifest>

@@ -50,7 +50,7 @@ public class CardViewActivity extends AppCompatActivity {
     }
 
     public void MatchingListener(View target){
-        Intent intent = new Intent(this, StudyViewAcitivity.class);
+        Intent intent = new Intent(this, GameOptionViewActivity.class);
         startActivity(intent);
     }
 
