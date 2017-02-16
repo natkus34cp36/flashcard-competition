@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
+import static nat.flashcardcompetition.Studyset.STUDYSET_ID;
+import static nat.flashcardcompetition.Studyset.STUDYSET_NAME;
 
 public class StudysetViewActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,9 @@ public class StudysetViewActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(StudysetViewActivity.this, CardViewActivity.class);
                 int studysetID = view.getId();
-                intent.putExtra(EXTRA_MESSAGE, studysetID);
+                String studysetName = ((TextView)view.findViewById(R.id.studyset_name)).getText().toString();
+                intent.putExtra(STUDYSET_ID, studysetID);
+                intent.putExtra(STUDYSET_NAME, studysetName);
                 startActivity(intent);
             }
         });

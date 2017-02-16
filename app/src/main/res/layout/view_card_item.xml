@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/small_gap"
+    android:background="@drawable/rounded_corner_list_item"
+    >
+
+
+        <TextView
+            android:id="@+id/card_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/small_gap"
+            android:paddingRight="@dimen/small_gap"
+            android:text="First"
+            android:textAlignment="center"
+            android:width="100dp"
+            />
+
+        <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_toEndOf="@id/card_first"-->
+            <!--android:background="@android:color/white"-->
+            <!--/>-->
+
+        <View
+            style="@style/Line"/>
+
+        <TextView
+            android:id="@+id/card_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/active_status"
+            android:layout_centerVertical="true"
+            android:text="Second"
+            android:textAlignment="center"
+            android:width="200dp"
+            />
+
+        <ImageButton
+            android:id="@+id/active_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@android:drawable/presence_online"
+             />
+
+
+</RelativeLayout>
+
