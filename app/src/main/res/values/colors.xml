@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="ocean_blue"> #80cbc4</color>
+    <color name="blue_green">#81c784</color>
+    <color name="light_pink">#ef9a9a</color>
     <color name="transparent"> #00FFFFFF</color>
 </resources>
