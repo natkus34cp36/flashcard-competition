@@ -12,28 +12,28 @@
     tools:context="nat.flashcardcompetition.CardViewActivity">
 
     <android.support.percent.PercentRelativeLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
         <TextView
-            android:text="Username"
             android:id="@+id/cardview_profile_textview"
             android:layout_height="0dp"
             android:layout_width="0dp"
+            android:text="Username"
             app:layout_widthPercent="100%"
             app:layout_heightPercent="5%"/>
 
         <Button
-            android:text="Study"
             android:id="@+id/study_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/cardview_profile_textview"
+            android:text="Study"
             android:textSize="@dimen/font_size"
             android:textAllCaps="false"
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            android:layout_below="@+id/cardview_profile_textview"
             android:onClick="StudyListener"
             app:layout_marginTopPercent="3%"
             app:layout_marginLeftPercent="5%"
@@ -41,41 +41,41 @@
             app:layout_heightPercent="10%"/>
 
         <Button
+            android:id="@+id/game_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/cardview_profile_textview"
+            android:layout_toRightOf="@+id/study_button"
             android:text="Matching"
             android:textSize="@dimen/font_size"
             android:textAllCaps="false"
-            android:id="@+id/game_button"
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            android:layout_below="@+id/cardview_profile_textview"
-            android:layout_toRightOf="@+id/study_button"
             android:onClick="MatchingListener"
             app:layout_marginTopPercent="3%"
             app:layout_widthPercent="30%"
             app:layout_heightPercent="10%" />
 
         <Button
+            android:id="@+id/scoreboard_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/cardview_profile_textview"
+            android:layout_toRightOf="@+id/game_button"
             android:text="Scoreboard"
             android:textSize="@dimen/font_size"
             android:textAllCaps="false"
-            android:id="@+id/scoreboard_button"
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            android:layout_below="@+id/cardview_profile_textview"
-            android:layout_toRightOf="@+id/game_button"
             android:onClick="ScoreboardListener"
             app:layout_marginTopPercent="3%"
             app:layout_widthPercent="30%"
             app:layout_heightPercent="10%"/>
 
         <ListView
-            android:layout_height="0dp"
+            android:id="@+id/card_listview"
             android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_below="@+id/study_button"
             app:layout_marginTopPercent="5%"
             app:layout_widthPercent="100%"
-            app:layout_heightPercent="80%"
-            android:id="@+id/card_listview" />
+            app:layout_heightPercent="80%" />
 
 
     </android.support.percent.PercentRelativeLayout>

@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StudySetViewActivity" />
+        <activity android:name=".StudysetViewActivity" />
         <activity android:name=".CardViewActivity" />
         <activity android:name=".StudyViewAcitivity"></activity>
     </application>

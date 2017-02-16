@@ -2,16 +2,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffee8509">
+    android:background="#ffffffff"
+    android:paddingLeft="@dimen/medium_gap"
+    android:paddingRight="@dimen/medium_gap"
+    >
 
     <ListView
+        android:id="@+id/studyset_listview"
         android:layout_height="0dp"
         android:layout_width="0dp"
+        android:divider="@color/transparent"
+        android:dividerHeight="@dimen/medium_gap"
+        android:scrollIndicators="none"
+        android:scrollbars="none"
         app:layout_marginTopPercent="5%"
         app:layout_widthPercent="100%"
-        app:layout_heightPercent="90%"
-        android:id="@+id/studyset_listview"
-        android:scrollIndicators="right">
+        app:layout_heightPercent="95%"
+        >
     </ListView>
 
 </android.support.percent.PercentRelativeLayout>

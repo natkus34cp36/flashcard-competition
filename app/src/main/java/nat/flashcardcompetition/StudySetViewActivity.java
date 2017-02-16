@@ -8,29 +8,28 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class StudySetViewActivity extends AppCompatActivity {
+public class StudysetViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_study_set_view);
+        setContentView(R.layout.activity_studyset_view);
 
         ArrayList<Studyset> studysets = getStudyset();
-        StudySetAdapter studySetAdapter = new StudySetAdapter(this, studysets);
+        StudysetAdapter studysetAdapter = new StudysetAdapter(this, studysets);
 
         ListView listView = (ListView) findViewById(R.id.studyset_listview);
-        listView.setAdapter(studySetAdapter);
+        listView.setAdapter(studysetAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
 
-                Intent intent = new Intent(StudySetViewActivity.this, CardViewActivity.class);
+                Intent intent = new Intent(StudysetViewActivity.this, CardViewActivity.class);
                 int studysetID = view.getId();
                 intent.putExtra(EXTRA_MESSAGE, studysetID);
                 startActivity(intent);
@@ -48,7 +47,7 @@ public class StudySetViewActivity extends AppCompatActivity {
             languages.add("En");
             languages.add("Th");
             languages.add("Jp");
-            Studyset temp = new Studyset(i,"StudySet :"+i, languages, 0.75);
+            Studyset temp = new Studyset(i,"StudySet"+i, languages, 0.75);
             studysets.add(temp);
         }
 

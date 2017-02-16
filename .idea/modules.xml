@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FlashCardCompetition.iml" filepath="$PROJECT_DIR$/FlashCardCompetition.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flashcard-competition.iml" filepath="$PROJECT_DIR$/flashcard-competition.iml" />
     </modules>
   </component>
 </project>
