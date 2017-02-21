@@ -16,5 +16,6 @@ public class GameOptionViewActivity extends AppCompatActivity {
     public void start(View view){
         Intent intent = new Intent(this, MatchingGameViewActivity.class);
         startActivity(intent);
+        finish();
     }
 }

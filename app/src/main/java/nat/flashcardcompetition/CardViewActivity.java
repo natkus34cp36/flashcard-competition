@@ -31,17 +31,6 @@ public class CardViewActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.card_listview);
         listView.setAdapter(cardAdapter);
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position,
-//                                    long id) {
-//
-//                Intent intent = new Intent(StudysetViewActivity.this, CardViewActivity.class);
-//                int studysetID = view.getId();
-//                intent.putExtra(EXTRA_MESSAGE, studysetID);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     public void StudyListener(View target){

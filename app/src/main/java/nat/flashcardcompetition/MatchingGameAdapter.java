@@ -2,6 +2,7 @@ package nat.flashcardcompetition;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,6 +10,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Nat on 2/16/2017.
@@ -16,19 +18,23 @@ import java.util.ArrayList;
 
 public class MatchingGameAdapter extends BaseAdapter {
 
-    private Context mContext;
-    private ArrayList<String> front;
-    private ArrayList<String> back;
-    private int m,n;
-    private final int MAXIMUM_WORDS = 10;
-    public MatchingGameAdapter(Context c, ArrayList<String> front, ArrayList<String> back) {
-        mContext = c;
-        this.front = front;
-        this.back = back;
+    private Context context;
+    private ArrayList<Card> cards;
+    private ArrayList<String> shuffledCards;
+    private int item_width;
+    private final int MAXIMUM_WORDS = 8;
+
+
+    public MatchingGameAdapter(Context c, ArrayList<Card> cards,int item_width) {
+        context = c;
+        this.cards = cards;
+        shuffledCards = shuffleCards(cards);
+        this.item_width = item_width;
+        Log.i("NAT", ""+item_width);
     }
 
     public int getCount() {
-        return front.size() + back.size();
+        return cards.size() * 2;
     }
 
     public Object getItem(int position) {
@@ -41,13 +47,20 @@ public class MatchingGameAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View gridView = inflater.inflate(R.layout.view_matching_game_item, null);
+
         TextView textView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            textView = new TextView(mContext);
-            textView.setText(""+position);
-            textView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            textView.setPadding(8, 8, 8, 8);
+
+            textView = (TextView) gridView.findViewById(R.id.matching_game_word);
+            textView.setLayoutParams(new GridView.LayoutParams(item_width, item_width));
+            textView.setBackground(context.getDrawable(R.drawable.game_item_ready));
+            textView.setText(shuffledCards.get(position));
+
         } else {
             textView = (TextView) convertView;
         }
@@ -55,18 +68,41 @@ public class MatchingGameAdapter extends BaseAdapter {
         return textView;
     }
 
-    public void setGrid(ArrayList<Card> cards){
+    // input cards, return list of string
+    public ArrayList<String> shuffleCards(ArrayList<Card> cards){
         int number_of_cards = cards.size() * 2;
 
-    }
-
-    public void setGrid(ArrayList<Card> cards, int m, int n){
-        if(m * n % 2 != 0  && m*n /2 <= MAXIMUM_WORDS){
-            Log.i("Matching Grid", "Has to be even number for grid with 10 maximum number of words");
-            return ;
+        // choose 8 cards from the deck
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i=0 ; i < cards.size() ; i++) {
+            list.add(new Integer(i));
         }
-        this.m = m;
-        this.n = n;
+        Collections.shuffle(list);
+
+        ArrayList<Card> SelectedCards = new ArrayList<>();
+        for (int i=0 ; i < MAXIMUM_WORDS ; i++) {
+            SelectedCards.add(cards.get(list.get(i)));
+        }
+
+        // random the order of cards,, shuffle to grid
+        list.clear();
+        for (int i=0 ; i < MAXIMUM_WORDS*2 ; i++) {
+            list.add(new Integer(i));
+        }
+        Collections.shuffle(list);
+
+        // get the list of number 1-n // will compare it to cards list
+        ArrayList<String> shuffledCards = new ArrayList<>();
+        for (int i=0 ; i< MAXIMUM_WORDS*2 ; i++) {
+            int index = list.get(i);
+            if(index % 2 == 0) {
+                shuffledCards.add(cards.get(index/2).first);
+            }else{
+                shuffledCards.add(cards.get(index/2).second);
+            }
+        }
+        return shuffledCards;
+
     }
 
 

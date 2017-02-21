@@ -32,6 +32,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/matching_time"
+        android:horizontalSpacing="@dimen/small_gap"
+        android:verticalSpacing="@dimen/small_gap"
+        android:numColumns="4"
+        android:isScrollContainer="false"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
         android:gravity="center"
         app:layout_widthPercent="100%"
         app:layout_heightPercent="95%"/>
