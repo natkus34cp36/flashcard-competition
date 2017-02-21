@@ -3,12 +3,14 @@ package nat.flashcardcompetition;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -31,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MatchingGameViewActivity extends AppCompatActivity {
 
+    public static String SCORE = "SCORE";
     private TextView time, score;
     private GridView gridView;
     private int width, height, grid_margin;
@@ -159,13 +162,17 @@ public class MatchingGameViewActivity extends AppCompatActivity {
 
         // Make a timer.
         time = (TextView) findViewById(R.id.matching_time);
-        new CountDownTimer(60000, 30) {
+        new CountDownTimer(10000, 30) {
             public void onTick(long millisUntilFinished) {
                 time.setText("Remaining: " + millisUntilFinished / 1000 + ":" +(millisUntilFinished%1000)/10);
             }
 
             public void onFinish() {
                 time.setText("done!");
+                Intent intent = new Intent(getApplication(),MatchingGameScoreActivity.class);
+                intent.putExtra(SCORE,matching_score);
+                startActivity(intent);
+                finish();
             }
         }.start();
 
