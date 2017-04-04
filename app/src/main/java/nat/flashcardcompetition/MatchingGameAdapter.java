@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import nat.flashcardcompetitionModel.Card;
 
 /**
  * Created by Nat on 2/16/2017.
@@ -19,13 +22,13 @@ import java.util.Collections;
 public class MatchingGameAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Card> cards;
-    private ArrayList<String> shuffledCards;
+    private List<Card> cards;
+    private List<String> shuffledCards;
     private int item_width;
     private final int MAXIMUM_WORDS = 8;
 
 
-    public MatchingGameAdapter(Context c, ArrayList<Card> cards,int item_width) {
+    public MatchingGameAdapter(Context c, List<Card> cards, int item_width) {
         context = c;
         this.cards = cards;
         shuffledCards = shuffleCards(cards);
@@ -34,7 +37,7 @@ public class MatchingGameAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return cards.size() * 2;
+        return shuffledCards.size();
     }
 
     public Object getItem(int position) {
@@ -69,9 +72,9 @@ public class MatchingGameAdapter extends BaseAdapter {
     }
 
     // input cards, return list of string
-    public ArrayList<String> shuffleCards(ArrayList<Card> cards){
-        int number_of_cards = cards.size() * 2;
+    public List<String> shuffleCards(List<Card> cards){
 
+        // TODO check shuffle again. Its broken.
         // choose 8 cards from the deck
         ArrayList<Integer> list = new ArrayList<Integer>();
         for (int i=0 ; i < cards.size() ; i++) {
@@ -79,9 +82,9 @@ public class MatchingGameAdapter extends BaseAdapter {
         }
         Collections.shuffle(list);
 
-        ArrayList<Card> SelectedCards = new ArrayList<>();
+        ArrayList<Card> selectedCards = new ArrayList<>();
         for (int i=0 ; i < MAXIMUM_WORDS ; i++) {
-            SelectedCards.add(cards.get(list.get(i)));
+            selectedCards.add(cards.get(list.get(i)));
         }
 
         // random the order of cards,, shuffle to grid
@@ -96,9 +99,9 @@ public class MatchingGameAdapter extends BaseAdapter {
         for (int i=0 ; i< MAXIMUM_WORDS*2 ; i++) {
             int index = list.get(i);
             if(index % 2 == 0) {
-                shuffledCards.add(cards.get(index/2).first);
+                shuffledCards.add(selectedCards.get(index/2).first);
             }else{
-                shuffledCards.add(cards.get(index/2).second);
+                shuffledCards.add(selectedCards.get(index/2).second);
             }
         }
         return shuffledCards;

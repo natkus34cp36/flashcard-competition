@@ -15,9 +15,11 @@
         android:dividerHeight="@dimen/medium_gap"
         android:scrollIndicators="none"
         android:scrollbars="none"
+        android:animateLayoutChanges="true"
         app:layout_marginTopPercent="5%"
         app:layout_widthPercent="100%"
         app:layout_heightPercent="95%"
+
         >
     </ListView>
 

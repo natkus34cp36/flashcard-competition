@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import nat.flashcardcompetitionModel.Studyset;
 
 /**
  * Created by nat on 2/14/17.
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 
 public class StudysetAdapter extends ArrayAdapter<Studyset>{
 
-    public StudysetAdapter(Context context, ArrayList<Studyset> studysets) {
+    public StudysetAdapter(Context context, List<Studyset> studysets) {
         super(context, 0, studysets);
     }
 
@@ -42,7 +45,7 @@ public class StudysetAdapter extends ArrayAdapter<Studyset>{
         name.setText(studyset.name);
         language.setText(supported_languages);
         highscore.setText(studyset.highscore+"");
-        convertView.setId(studyset.studysetID);
+        convertView.setId(studyset.id);
 
         return convertView;
     }

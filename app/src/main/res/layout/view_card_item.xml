@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            app:srcCompat="@android:drawable/presence_online"
+            android:background="@color/transparent"
+            app:srcCompat="@drawable/ic_radio_button_checked_black_24dp"
              />
 
 

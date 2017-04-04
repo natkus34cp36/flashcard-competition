@@ -1,35 +1,29 @@
 package nat.flashcardcompetition;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.GridLayout;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+
+import nat.flashcardcompetitionModel.Card;
+import nat.sqlite.DBManager;
+
+import static nat.flashcardcompetitionModel.Studyset.STUDYSET_ID;
 
 public class MatchingGameViewActivity extends AppCompatActivity {
 
@@ -38,10 +32,17 @@ public class MatchingGameViewActivity extends AppCompatActivity {
     private GridView gridView;
     private int width, height, grid_margin;
 
+    DBManager dbManager;
+    int studySetId;
+    String lang1, lang2;
+
     // Grid Params
     int item_width, grid_max_height, grid_padding;
 
     // Game Controller
+    private CountDownTimer countDownTimer;
+    private long min,sec,mil;
+    private int time_limit;
     private int state = 0;
     private final int READY = 0;
     private final int CHOSEN = 1;
@@ -53,6 +54,8 @@ public class MatchingGameViewActivity extends AppCompatActivity {
     private HashMap<String, String> answerMap;
     private HashMap<Integer, Boolean> isClickable;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,15 @@ public class MatchingGameViewActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.matching_game);
         score = (TextView) findViewById(R.id.matching_score);
 
+        Intent intent = getIntent();
+        time_limit = intent.getIntExtra("time_limit",60000);
+        studySetId = intent.getIntExtra(STUDYSET_ID, 1);
+        lang1 = intent.getStringExtra("lang1");
+        lang2 = intent.getStringExtra("lang2");
+
+
+        dbManager = new DBManager(this);
+        dbManager.open();
         /*** CALCULATING GRID DIMENSION and ITEM WIDTH***/
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -77,7 +89,8 @@ public class MatchingGameViewActivity extends AppCompatActivity {
 
         grid_margin = (int)getResources().getDimension(R.dimen.small_gap);
         Log.e("Display info","width: "+width+", height: "+height);
-
+        // using 93% for width
+        width *= 0.94;
         // there would be 3 space between 4 items. (for some reason, I cant use 5 for outer margin)
         item_width = ( width - (3 * grid_margin) ) / 4;
         grid_max_height = (int)(height*0.9); // the time and score is 10% of screen height.
@@ -91,11 +104,13 @@ public class MatchingGameViewActivity extends AppCompatActivity {
         resetGame(); // get card, shuffle cards, reset game params, reset grid and its adapter.
 
         final Handler handler = new Handler();
+        final Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView temp = (TextView)view.findViewById(R.id.matching_game_word);
+                temp.setClickable(false);
                 String word = temp.getText().toString();
 
                 if(isClickable.get(position)) {
@@ -132,6 +147,8 @@ public class MatchingGameViewActivity extends AppCompatActivity {
                         } else {
                             temp.setBackground(getDrawable(R.drawable.game_item_wrong));
                             gridView.getChildAt(choosing_position).setBackground(getDrawable(R.drawable.game_item_wrong));
+                            temp.startAnimation(shake);
+                            gridView.getChildAt(choosing_position).startAnimation(shake);
 
                             matching_score -= 100;
                             if (matching_score < 0) matching_score = 0;
@@ -158,13 +175,19 @@ public class MatchingGameViewActivity extends AppCompatActivity {
                 Log.e("NAT", position+", "+word);
             }
         });
+    }
 
-
+    private void makeTimer(){
         // Make a timer.
         time = (TextView) findViewById(R.id.matching_time);
-        new CountDownTimer(10000, 30) {
+        countDownTimer = new CountDownTimer(time_limit, 30) {
+
             public void onTick(long millisUntilFinished) {
-                time.setText("Remaining: " + millisUntilFinished / 1000 + ":" +(millisUntilFinished%1000)/10);
+                Log.i("TIME", ""+millisUntilFinished);
+                min = millisUntilFinished / 60000;
+                sec = (millisUntilFinished % 60000) / 1000;
+                mil = (millisUntilFinished%1000)/10;
+                time.setText("Remaining: " + min + ":" + sec + ":" + mil);
             }
 
             public void onFinish() {
@@ -174,8 +197,9 @@ public class MatchingGameViewActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }.start();
 
+
+        }.start();
     }
 
     private void resetGame(){
@@ -183,30 +207,88 @@ public class MatchingGameViewActivity extends AppCompatActivity {
         state = READY;
         matched_pair = 0;
 
+        int game_size = 16;
         for(int i=0;i<16;i++)
             isClickable.put(i,true);
 
-        MatchingGameAdapter matchingGameAdapter = new MatchingGameAdapter(this,getCards(),item_width);
+        List<Card> cards = getCards();
+
+        answerMap = new HashMap<>();
+        for(int i=0;i<cards.size();i++){
+            answerMap.put(cards.get(i).first,cards.get(i).second);
+            answerMap.put(cards.get(i).second,cards.get(i).first);
+        }
+
+        MatchingGameAdapter matchingGameAdapter = new MatchingGameAdapter(this,cards,item_width);
         gridView.setAdapter(matchingGameAdapter);
     }
 
-    private ArrayList<Card> getCards(){
-        // TODO get the real data
-        ArrayList<Card> cards = new ArrayList<>();
-        String[] front = {"Lust","Gluttony","Greed","Sloth","Wrath","Envy","Pride","Love"};
-        String[] back = {"ความหื่น","ความตะกละ","ความโลภ","ความขี้เกียจ","ความโกรธ","ความขี้อิจฉา","ความยะโส","ความรัก"};
-        answerMap = new HashMap<>();
-        int n = front.length;
-        // in this case, if there are two words with the same meaning, we can mark it as true!
-        for(int i=0;i<n;i++){
-            answerMap.put(front[i],back[i]);
-            answerMap.put(back[i],front[i]);
-        }
-        for(int i=0;i<n;i++){
-            Card temp = new Card(i,front[i],back[i],front[i],true);
-            cards.add(temp);
-        }
-        return cards;
+    private List<Card> getCards(){
+        return dbManager.getCardByStudySetId(studySetId,lang1,lang2);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        countDownTimer.cancel();
+    }
+
+    private final String tag = "TESTING";
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        Log.v(tag,"I am in onpause");
+        countDownTimer.cancel();
+    }
+
+    @Override
+    protected void onRestart() {
+        // TODO Auto-generated method stub
+        super.onRestart();
+        Log.v(tag,"I am in onRestart");
+    }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        Log.v(tag,"I am in onresume");
+    }
+
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        Log.v(tag,"I am in onstart");
+        makeTimer();
+
+    }
+
+    @Override
+    protected void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
+        Log.v(tag,"I am in onstop");
+    }
+
+//    @Override
+//    protected void onPostResume() {
+//        super.onPostResume();
+//        countDownTimer = new CountDownTimer(time_limit, 30) {
+//
+//            public void onTick(long millisUntilFinished) {
+//                Log.i("TIME", ""+millisUntilFinished);
+//                time.setText("Remaining: " + millisUntilFinished / 60000 + ":" + (millisUntilFinished % 60000) / 1000 + ":" +(millisUntilFinished%1000)/10);
+//            }
+//
+//            public void onFinish() {
+//                time.setText("done!");
+//                Intent intent = new Intent(getApplication(),MatchingGameScoreActivity.class);
+//                intent.putExtra(SCORE,matching_score);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }.start();
+//    }
 }

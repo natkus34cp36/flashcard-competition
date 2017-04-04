@@ -1,45 +1,110 @@
 package nat.flashcardcompetition;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-import static nat.flashcardcompetition.Studyset.STUDYSET_ID;
-import static nat.flashcardcompetition.Studyset.STUDYSET_NAME;
+import nat.flashcardcompetitionModel.Card;
+import nat.sqlite.DBManager;
+
+import static nat.flashcardcompetitionModel.Studyset.STUDYSET_ID;
+import static nat.flashcardcompetitionModel.Studyset.STUDYSET_NAME;
+import static nat.flashcardcompetitionModel.Studyset.STUDYSET_SUPPORTED_LANGUAGES;
 
 public class CardViewActivity extends AppCompatActivity {
+
+    DBManager dbManager;
+    int studySetId;
+    String lang1,lang2;
+    String[] studySetSupportedLanguages;
+
+    CardAdapter cardAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_view);
 
+        dbManager = new DBManager(this);
+        dbManager.open();
+
         Intent intent = getIntent();
-        String studySetID = intent.getStringExtra(STUDYSET_ID);
+        studySetId = intent.getIntExtra(STUDYSET_ID, 1);
         String studySetName = intent.getStringExtra(STUDYSET_NAME);
+        studySetSupportedLanguages = intent.getStringExtra(STUDYSET_SUPPORTED_LANGUAGES).replaceAll("\\s+","").split(",");
+
+        prepareLang();
+
+        Log.i("LANGUAGE", intent.getStringExtra(STUDYSET_SUPPORTED_LANGUAGES).replaceAll("\\s+",""));
+        Log.i("LANGUAGE", "lang1: "+ lang1 + ", lang2: " + lang2);
+
         this.getSupportActionBar().setTitle(studySetName);
 
-        ArrayList<Card> cards = getCards();
-        CardAdapter cardAdapter = new CardAdapter(this,cards);
+        cardAdapter = new CardAdapter(this,getCards()); // getCards() must be called after prepareLang().
 
         ListView listView = (ListView) findViewById(R.id.card_listview);
         listView.setAdapter(cardAdapter);
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        prepareLang();
+        cardAdapter.clear();
+        List<Card> cards = getCards();
+        Log.i("CARD", "lang1: " + lang1 + ", lang2: " + lang2 + ", card-front: " + cards.get(0).first + "card-back: " + cards.get(0).second);
+        cardAdapter.addAll(cards);
+        cardAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_card_view, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                Intent intent = new Intent(this, CardSettingsActivity.class);
+                intent.putExtra(STUDYSET_ID, studySetId);
+                intent.putExtra(STUDYSET_SUPPORTED_LANGUAGES, studySetSupportedLanguages);
+                intent.putExtra("lang1", lang1);
+                intent.putExtra("lang2", lang2);
+                startActivity(intent);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void StudyListener(View target){
         Intent intent = new Intent(this, StudyViewAcitivity.class);
+        intent.putExtra(STUDYSET_ID, studySetId);
+        intent.putExtra("lang1",lang1);
+        intent.putExtra("lang2",lang2);
         startActivity(intent);
     }
 
     public void MatchingListener(View target){
         Intent intent = new Intent(this, GameOptionViewActivity.class);
+        intent.putExtra(STUDYSET_ID, studySetId);
+        intent.putExtra("lang1",lang1);
+        intent.putExtra("lang2",lang2);
         startActivity(intent);
     }
 
@@ -48,15 +113,25 @@ public class CardViewActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private ArrayList<Card> getCards(){
-        ArrayList<Card> cards = new ArrayList<>();
-        String[] firsts = {"Lust","Gluttony","Greed","Sloth","Wrath","Envy","Pride"};
-        String[] seconds = {"ความหื่น","ความตะกละ","ความโลภ","ความขี้เกียจ","ความโกรธ","ความขี้อิจฉา","ความยะโส"};
-        for(int i=0;i<firsts.length;i++){
-            Card temp = new Card(i,firsts[i],seconds[i],firsts[i],true);
-            cards.add(temp);
+    private List<Card> getCards(){
+        return dbManager.getCardByStudySetId(studySetId, lang1, lang2);
+    }
+
+    public void prepareLang(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // first time in this page, no settings yet.
+        if(!sharedPreferences.contains(studySetId+":front:"+studySetSupportedLanguages[0])){
+            lang1 = studySetSupportedLanguages[0];
+            lang2 = studySetSupportedLanguages[1];
+            return ;
         }
-        return cards;
+
+        // 2nd time+
+        for(String lang :studySetSupportedLanguages){
+            if(sharedPreferences.getBoolean(studySetId+":front:"+lang, false)) lang1 = lang;
+            if(sharedPreferences.getBoolean(studySetId+":back:"+lang, false)) lang2 = lang;
+        }
     }
 
 }

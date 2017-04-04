@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +29,11 @@
         <activity android:name=".StudyViewAcitivity" />
         <activity android:name=".GameOptionViewActivity" />
         <activity android:name=".MatchingGameViewActivity" />
-        <activity android:name=".MatchingGameScoreActivity"></activity>
+        <activity android:name=".MatchingGameScoreActivity" />
+        <activity
+            android:name=".CardSettingsActivity"
+            android:label="@string/title_activity_card_settings"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

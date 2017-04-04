@@ -1,13 +1,17 @@
 package nat.flashcardcompetition;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import nat.flashcardcompetitionModel.Card;
 
 /**
  * Created by Nat on 2/15/2017.
@@ -15,7 +19,7 @@ import java.util.ArrayList;
 
 public class CardAdapter extends ArrayAdapter<Card> {
 
-    public CardAdapter(Context context, ArrayList<Card> cards) {
+    public CardAdapter(Context context, List<Card> cards) {
         super(context, 0, cards);
     }
 
@@ -31,6 +35,26 @@ public class CardAdapter extends ArrayAdapter<Card> {
 
         TextView first = (TextView) convertView.findViewById(R.id.card_first);
         TextView second = (TextView) convertView.findViewById(R.id.card_second);
+        ImageView active_status = (ImageView) convertView.findViewById(R.id.active_status);
+        active_status.setTag("isActive");
+        active_status.setOnClickListener(new ImageView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(v.getTag() == "isActive"){
+                    v.setBackgroundResource(R.drawable.ic_radio_button_unchecked_black_24dp);
+                    v.setBackground(getContext().getDrawable(R.drawable.ic_radio_button_unchecked_black_24dp));
+                    v.setTag("isNotActive");
+                    Log.i("ACTIVE","SHOULD BE INACTIVE");
+                }else{
+                    v.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+                    v.setBackground(getContext().getDrawable(R.drawable.ic_radio_button_checked_black_24dp));
+                    v.setTag("isActive");
+                    Log.i("ACTIVE","SHOULD BE ACTIVE");
+                }
+                Log.i("ACTIVE STATUS",v.getTag()+"");
+            }
+        });
 //        TextView pronunciation = (TextView) convertView.findViewById(R.id.card_pronunciation);
 
         first.setText(card.first);
