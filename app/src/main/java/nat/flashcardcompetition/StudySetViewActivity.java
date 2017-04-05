@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import nat.flashcardcompetitionModel.CardMeta;
+import nat.flashcardcompetitionModel.Scoreboard;
 import nat.flashcardcompetitionModel.Studyset;
 import nat.sqlite.DBManager;
 
@@ -34,8 +35,30 @@ public class StudysetViewActivity extends AppCompatActivity implements OnTaskCom
 
         dbManager = new DBManager(this);
         dbManager.open();
+
         if(isNetworkAvailable()){
-            new APICaller(dbManager,this).execute();
+            APICaller apiCaller = new APICaller(dbManager, this);
+            apiCaller.prepareGetStudyset();
+            apiCaller.execute();
+
+//            Scoreboard scoreboard = new Scoreboard();
+//            scoreboard.setId(1);
+//            scoreboard.setName("Nat");
+//            scoreboard.setAndroid_id("ABC");
+//            scoreboard.setStudyset(1);
+//            scoreboard.setMode(0);
+//            scoreboard.setOption(0);
+//            scoreboard.setLang1("En");
+//            scoreboard.setLang2("Jp");
+//            scoreboard.setScore(2000);
+//
+//            APICaller apiCaller2 = new APICaller(dbManager, this);
+//            apiCaller2.prepareGetScore(scoreboard);
+//            apiCaller2.execute();
+////
+//            APICaller apiCaller3 = new APICaller(dbManager, this);
+//            apiCaller3.preparePostScore(scoreboard);
+//            apiCaller3.execute();
         }
 
         studysetAdapter = new StudysetAdapter(this, dbManager.getStudySet());

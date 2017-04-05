@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,6 +153,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+
+        String name = mEmailView.getText().toString();
+
+        if(!name.matches("^\\p{L}[\\p{L}\\s]*\\p{L}$")){
+            Toast.makeText(this, "The accepted name contains only letters.", Toast.LENGTH_LONG).show();
+            return ;
+        }
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("name", name);
+        editor.putString("android_id", Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID));
+        editor.commit();
+
         Intent intent = new Intent(this, StudysetViewActivity.class);
         startActivity(intent);
         finish();

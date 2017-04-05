@@ -194,6 +194,10 @@ public class MatchingGameViewActivity extends AppCompatActivity {
                 time.setText("done!");
                 Intent intent = new Intent(getApplication(),MatchingGameScoreActivity.class);
                 intent.putExtra(SCORE,matching_score);
+                intent.putExtra(STUDYSET_ID, studySetId);
+                intent.putExtra("lang1",lang1);
+                intent.putExtra("lang2",lang2);
+                intent.putExtra("time_limit", time_limit);
                 startActivity(intent);
                 finish();
             }

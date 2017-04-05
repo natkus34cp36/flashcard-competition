@@ -8,9 +8,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonStreamParser;
 
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import nat.flashcardcompetitionModel.CardInfo;
+import nat.flashcardcompetitionModel.Scoreboard;
 import nat.flashcardcompetitionModel.Studyset;
 import nat.sqlite.DBManager;
 
@@ -31,8 +37,17 @@ public class APICaller extends AsyncTask {
 
     private final String BASE_URL = "http://104.236.175.89:12000/";
     private final String STUDY_SET = "studyset/";
+    private final String SCOREBOARD = "scoreboard/";
+
     private DBManager dbManager;
     private OnTaskCompleted listener;
+    private REQUEST_TYPE request_type;
+
+    private String name,android_id,lang1,lang2;
+    private int studyset,mode,option,score;
+
+    private Scoreboard scoreboard;
+    private List<Scoreboard> get_scoreboards;
 
     public enum REQUEST_TYPE{
         GET_STUDYSETS, GET_SCORE, POST_SCORE
@@ -44,10 +59,18 @@ public class APICaller extends AsyncTask {
         this.listener = listener;
     }
 
-    public APICaller(DBManager dbManager, OnTaskCompleted listener, REQUEST_TYPE request_type, Object args) {
-        super();
-        this.dbManager = dbManager;
-        this.listener = listener;
+    public void prepareGetStudyset(){
+        request_type = REQUEST_TYPE.GET_STUDYSETS;
+    }
+
+    public void prepareGetScore(Scoreboard scoreboard){
+        request_type = REQUEST_TYPE.GET_SCORE;
+        this.scoreboard = scoreboard;
+    }
+
+    public void preparePostScore(Scoreboard scoreboard){
+        request_type = REQUEST_TYPE.POST_SCORE;
+        this.scoreboard = scoreboard;
     }
 
     @Override
@@ -57,7 +80,21 @@ public class APICaller extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] params) {
-        getStudySet();
+
+        switch (request_type){
+            case GET_STUDYSETS:
+                getStudySet();
+                break;
+            case GET_SCORE:
+                getScore();
+                break;
+            case POST_SCORE:
+                postScore();
+                break;
+            default:
+                getStudySet();
+                break;
+        }
         return null;
     }
 
@@ -108,6 +145,79 @@ public class APICaller extends AsyncTask {
             e.printStackTrace();
         }
     }
+
+    private void getScore(){
+        try {
+            String get_url = BASE_URL+SCOREBOARD;
+            get_url += scoreboard.getAndroid_id() + "/" + scoreboard.getStudyset() + "/" + scoreboard.getLang1() + "/" + scoreboard.getLang2();
+            URL url = new URL(get_url);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+            JsonStreamParser jsonStreamParser = new JsonStreamParser(bufferedReader);
+            JsonElement json = jsonStreamParser.next();
+            if(json.isJsonArray()){
+                get_scoreboards = new ArrayList<>();
+                Iterator<JsonElement> scoreboards = json.getAsJsonArray().iterator();
+                while(scoreboards.hasNext()){
+                    JsonObject scoreboard = scoreboards.next().getAsJsonObject();
+                    Scoreboard new_scoreboard = new Scoreboard();
+
+                    new_scoreboard.setId(scoreboard.get("id").getAsInt());
+                    new_scoreboard.setName(scoreboard.get("name").getAsString());
+                    new_scoreboard.setAndroid_id(scoreboard.get("androidId").getAsString());
+                    new_scoreboard.setStudyset(scoreboard.get("studySetId").getAsInt());
+                    new_scoreboard.setMode(scoreboard.get("mode").getAsInt());
+                    new_scoreboard.setOption(scoreboard.get("option").getAsInt());
+                    new_scoreboard.setLang1(scoreboard.get("language1").getAsString());
+                    new_scoreboard.setLang2(scoreboard.get("language2").getAsString());
+                    new_scoreboard.setScore(scoreboard.get("score").getAsInt());
+
+                    Log.i("SCOREBOARD",new_scoreboard.toString());
+                    get_scoreboards.add(new_scoreboard);
+                }
+
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void postScore(){
+        try {
+            URL url = new URL(BASE_URL+SCOREBOARD);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            JSONObject json = new JSONObject();
+            json.put("name", scoreboard.getName());
+            json.put("androidId", scoreboard.getAndroid_id());
+            json.put("studySetId", scoreboard.getStudyset());
+            json.put("mode", scoreboard.getMode());
+            json.put("option", scoreboard.getOption());
+            json.put("language1", scoreboard.getLang1());
+            json.put("language2", scoreboard.getLang2());
+            json.put("score", scoreboard.getScore());
+
+            OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
+            wr.write(json.toString());
+            wr.close();
+
+            int status = urlConnection.getResponseCode();
+            Log.i("POST STATUS", status+"");
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
