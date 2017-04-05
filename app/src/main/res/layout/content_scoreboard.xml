@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="nat.flashcardcompetition.ScoreboardActivity"
+    tools:showIn="@layout/activity_scoreboard"
+    >
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="336dp"
+        android:layout_height="463dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <TextView
+            android:id="@+id/scoreboard_detail_textview"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:text="StudySet En Jp"
+            app:layout_widthPercent="100%"
+            app:layout_heightPercent="5%"/>
+
+        <Button
+            android:id="@+id/option1_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/scoreboard_detail_textview"
+            android:background="@drawable/button"
+            android:text="@string/option1"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/font_size"
+            android:textAllCaps="false"
+            android:onClick="showOption1"
+            app:layout_marginTopPercent="3%"
+            app:layout_marginLeftPercent="5%"
+            app:layout_widthPercent="28%"
+            app:layout_heightPercent="10%"/>
+
+        <Button
+            android:id="@+id/option2_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/scoreboard_detail_textview"
+            android:background="@drawable/button"
+            android:text="@string/option2"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/font_size"
+            android:textAllCaps="false"
+            android:onClick="showOption2"
+            app:layout_marginTopPercent="3%"
+            app:layout_marginLeftPercent="36%"
+            app:layout_widthPercent="28%"
+            app:layout_heightPercent="10%" />
+
+        <Button
+            android:id="@+id/option3_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/scoreboard_detail_textview"
+            android:background="@drawable/button"
+            android:text="@string/option3"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/font_size"
+            android:textAllCaps="false"
+            android:onClick="showOption3"
+            app:layout_marginTopPercent="3%"
+            app:layout_marginLeftPercent="67%"
+            app:layout_widthPercent="28%"
+            app:layout_heightPercent="10%"/>
+
+        <ListView
+            android:id="@+id/scoreboard_listview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/option1_button"
+            android:divider="@color/transparent"
+            android:dividerHeight="@dimen/small_gap"
+            app:layout_marginTopPercent="5%"
+            app:layout_widthPercent="100%"
+            app:layout_heightPercent="80%"
+            />
+
+
+    </android.support.percent.PercentRelativeLayout>
+
+</android.widget.RelativeLayout>

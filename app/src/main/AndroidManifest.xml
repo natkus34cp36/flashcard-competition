@@ -17,13 +17,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        />
         <activity android:name=".StudysetViewActivity" />
         <activity android:name=".CardViewActivity" />
         <activity android:name=".StudyViewAcitivity" />
@@ -33,7 +28,19 @@
         <activity
             android:name=".CardSettingsActivity"
             android:label="@string/title_activity_card_settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ScoreboardActivity"
+            android:label="@string/title_activity_scoreboard"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".StartUpActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

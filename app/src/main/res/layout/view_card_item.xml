@@ -35,22 +35,34 @@
             android:id="@+id/card_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/active_status"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:text="Second"
             android:textAlignment="center"
             android:width="200dp"
             />
 
-        <ImageButton
-            android:id="@+id/active_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@color/transparent"
-            app:srcCompat="@drawable/ic_radio_button_checked_black_24dp"
-             />
+        <!--Having active status-->
+        <!--<TextView-->
+            <!--android:id="@+id/card_second"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_toLeftOf="@+id/active_status"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:text="Second"-->
+            <!--android:textAlignment="center"-->
+            <!--android:width="200dp"-->
+            <!--/>-->
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/active_status"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:background="@color/transparent"-->
+            <!--app:srcCompat="@drawable/ic_radio_button_checked_black_24dp"-->
+             <!--/>-->
 
 
 </RelativeLayout>

@@ -3,17 +3,14 @@ package nat.flashcardcompetition;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonStreamParser;
 
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -40,7 +37,8 @@ public class APICaller extends AsyncTask {
     private final String SCOREBOARD = "scoreboard/";
 
     private DBManager dbManager;
-    private OnTaskCompleted listener;
+    private OnTaskCompleted listener1;
+    private OnTaskCompleted2 listener2;
     private REQUEST_TYPE request_type;
 
     private String name,android_id,lang1,lang2;
@@ -53,10 +51,16 @@ public class APICaller extends AsyncTask {
         GET_STUDYSETS, GET_SCORE, POST_SCORE
     }
 
-    public APICaller(DBManager dbManager, OnTaskCompleted listener) {
+    public APICaller(DBManager dbManager, OnTaskCompleted listener1) {
         super();
         this.dbManager = dbManager;
-        this.listener = listener;
+        this.listener1 = listener1;
+    }
+
+    public APICaller(DBManager dbManager, OnTaskCompleted2 listener2) {
+        super();
+        this.dbManager = dbManager;
+        this.listener2 = listener2;
     }
 
     public void prepareGetStudyset(){
@@ -86,8 +90,7 @@ public class APICaller extends AsyncTask {
                 getStudySet();
                 break;
             case GET_SCORE:
-                getScore();
-                break;
+                return getScore();
             case POST_SCORE:
                 postScore();
                 break;
@@ -146,10 +149,20 @@ public class APICaller extends AsyncTask {
         }
     }
 
-    private void getScore(){
+    private List<Scoreboard> getScore(){
+        if(scoreboard.getLang1() == null || scoreboard.getLang2() == null || scoreboard.getStudyset() == 0)
+            return null;
+
         try {
             String get_url = BASE_URL+SCOREBOARD;
-            get_url += scoreboard.getAndroid_id() + "/" + scoreboard.getStudyset() + "/" + scoreboard.getLang1() + "/" + scoreboard.getLang2();
+
+            if(scoreboard.getLang1().compareTo(scoreboard.getLang2()) > 0){
+                String temp = scoreboard.getLang1();
+                scoreboard.setLang1(scoreboard.getLang2());
+                scoreboard.setLang2(temp);
+            }
+
+            get_url += scoreboard.getStudyset() + "/" + scoreboard.getLang1() + "/" + scoreboard.getLang2();
             URL url = new URL(get_url);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -183,6 +196,7 @@ public class APICaller extends AsyncTask {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return get_scoreboards;
     }
 
     private void postScore(){
@@ -221,7 +235,10 @@ public class APICaller extends AsyncTask {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        listener.onTaskCompleted();
+        if(listener1 != null)
+            listener1.onTaskCompleted();
+        if(listener2 != null)
+            listener2.onTaskCompleted(o);
     }
 
 

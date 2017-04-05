@@ -35,27 +35,28 @@ public class CardAdapter extends ArrayAdapter<Card> {
 
         TextView first = (TextView) convertView.findViewById(R.id.card_first);
         TextView second = (TextView) convertView.findViewById(R.id.card_second);
-        ImageView active_status = (ImageView) convertView.findViewById(R.id.active_status);
-        active_status.setTag("isActive");
-        active_status.setOnClickListener(new ImageView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if(v.getTag() == "isActive"){
-                    v.setBackgroundResource(R.drawable.ic_radio_button_unchecked_black_24dp);
-                    v.setBackground(getContext().getDrawable(R.drawable.ic_radio_button_unchecked_black_24dp));
-                    v.setTag("isNotActive");
-                    Log.i("ACTIVE","SHOULD BE INACTIVE");
-                }else{
-                    v.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
-                    v.setBackground(getContext().getDrawable(R.drawable.ic_radio_button_checked_black_24dp));
-                    v.setTag("isActive");
-                    Log.i("ACTIVE","SHOULD BE ACTIVE");
-                }
-                Log.i("ACTIVE STATUS",v.getTag()+"");
-            }
-        });
-//        TextView pronunciation = (TextView) convertView.findViewById(R.id.card_pronunciation);
+        // TODO create active status
+//        ImageView active_status = (ImageView) convertView.findViewById(R.id.active_status);
+//        active_status.setTag("isActive");
+//        active_status.setOnClickListener(new ImageView.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                if(v.getTag() == "isActive"){
+//                    v.setBackgroundResource(R.drawable.ic_radio_button_unchecked_black_24dp);
+//                    v.setBackground(getContext().getDrawable(R.drawable.ic_radio_button_unchecked_black_24dp));
+//                    v.setTag("isNotActive");
+//                    Log.i("ACTIVE","SHOULD BE INACTIVE");
+//                }else{
+//                    v.setBackgroundResource(R.drawable.ic_radio_button_checked_black_24dp);
+//                    v.setBackground(getContext().getDrawable(R.drawable.ic_radio_button_checked_black_24dp));
+//                    v.setTag("isActive");
+//                    Log.i("ACTIVE","SHOULD BE ACTIVE");
+//                }
+//                Log.i("ACTIVE STATUS",v.getTag()+"");
+//            }
+//        });
 
         first.setText(card.first);
         second.setText(card.second);

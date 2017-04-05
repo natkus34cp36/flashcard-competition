@@ -91,4 +91,5 @@ public class Scoreboard {
     public String toString(){
         return android_id + ":" + name + "," + studyset + ":" + mode + ":" + option + ":" + lang1 + ":" + lang2 + " score: " + score;
     }
+
 }

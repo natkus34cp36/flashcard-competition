@@ -109,7 +109,10 @@ public class CardViewActivity extends AppCompatActivity {
     }
 
     public void ScoreboardListener(View target){
-        Intent intent = new Intent(this, StudyViewAcitivity.class);
+        Intent intent = new Intent(this, ScoreboardActivity.class);
+        intent.putExtra(STUDYSET_ID, studySetId);
+        intent.putExtra("lang1",lang1);
+        intent.putExtra("lang2",lang2);
         startActivity(intent);
     }
 
