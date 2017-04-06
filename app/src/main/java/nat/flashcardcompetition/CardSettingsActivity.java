@@ -1,9 +1,12 @@
 package nat.flashcardcompetition;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 
 import static nat.flashcardcompetitionModel.Studyset.STUDYSET_ID;
@@ -44,6 +47,32 @@ public class CardSettingsActivity extends AppCompatActivity {
             .add(R.id.card_settings_fragment, cardSettingsActivityFragment)
             .commit();
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // check if shared preferences have some value
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        int countFront = 0, countBack = 0;
+        for(String lang :studySetSupportedLanguages){
+            if(sharedPreferences.getBoolean(studySetId+":front:"+lang, false)){
+                countFront++;
+                lang1 = lang;
+            }
+            if(sharedPreferences.getBoolean(studySetId+":back:"+lang, false)){
+                countBack++;
+                lang2 = lang;
+            }
+        }
+        if(countFront == 1 && countBack == 1&& !lang1.equals(lang2)){
+            super.onBackPressed();
+        } else if(countFront == 1 && countBack == 1 && lang1.equals(lang2)) {
+            Toast.makeText(this, "Language for front and back must be different.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Only one language for front and back must be checked.", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

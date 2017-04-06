@@ -33,7 +33,6 @@ public class MatchingGameAdapter extends BaseAdapter {
         this.cards = cards;
         shuffledCards = shuffleCards(cards);
         this.item_width = item_width;
-        Log.i("NAT", ""+item_width);
     }
 
     public int getCount() {

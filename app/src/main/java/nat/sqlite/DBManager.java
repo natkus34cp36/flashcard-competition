@@ -195,7 +195,7 @@ public class DBManager {
             CardInfo card1 = temp.get(0);
             CardInfo card2 = temp.get(1);
             card.cardID = card1.cardId;
-            Log.i("BEFORE CARD", "lang1: " + lang1 + ", lang2: " + lang2 + ", card1: " + card1.language + ", " + card1.word + " card2: " + card2.language + ", " + card2.word );
+//            Log.i("BEFORE CARD", "lang1: " + lang1 + ", lang2: " + lang2 + ", card1: " + card1.language + ", " + card1.word + " card2: " + card2.language + ", " + card2.word );
             if(card1.language.equals(lang1)){
                 card.first = card1.word;
                 card.second = card2.word;
@@ -203,7 +203,7 @@ public class DBManager {
                 card.first = card2.word;
                 card.second = card1.word;
             }
-            Log.i("AFTER CARD", "lang1: " + lang1 + ", lang2: " + lang2 + ", card-front: " + card.first + " card-back: " + card.second);
+//            Log.i("AFTER CARD", "lang1: " + lang1 + ", lang2: " + lang2 + ", card-front: " + card.first + " card-back: " + card.second);
             // TODO check card meta for the active.
             card.active = true;
             cards.add(card);
@@ -259,6 +259,6 @@ public class DBManager {
         String selection = FlashcardCompetitionContract.CardMeta.COLUMN_NAME_CARD_ID + " LIKE ?";
         String[] selectionArgs = { ""+cardMeta.cardID };
         int count = database.update(FlashcardCompetitionContract.CardMeta.TABLE_NAME,contentValues,selection,selectionArgs);
-        Log.i("UpdateCardMeta :", "Number of Update = " +count);
+//        Log.i("UpdateCardMeta :", "Number of Update = " +count);
     }
 }

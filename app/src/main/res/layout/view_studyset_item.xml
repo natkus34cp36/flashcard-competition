@@ -20,17 +20,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:text="Name"
-            android:maxWidth="100dp"
+            android:maxWidth="150dp"
             />
 
         <TextView
             android:id="@+id/studyset_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:text="Supported Language"
-            android:maxWidth="200dp"
+            android:textAlignment="textEnd"
+            android:maxWidth="100dp"
+            android:maxLines="3"
              />
     </RelativeLayout>
 

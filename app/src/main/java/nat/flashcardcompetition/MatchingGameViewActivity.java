@@ -183,7 +183,7 @@ public class MatchingGameViewActivity extends AppCompatActivity {
         countDownTimer = new CountDownTimer(time_limit, 30) {
 
             public void onTick(long millisUntilFinished) {
-                Log.i("TIME", ""+millisUntilFinished);
+//                Log.i("TIME", ""+millisUntilFinished);
                 min = millisUntilFinished / 60000;
                 sec = (millisUntilFinished % 60000) / 1000;
                 mil = (millisUntilFinished%1000)/10;

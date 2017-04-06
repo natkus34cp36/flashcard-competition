@@ -123,7 +123,7 @@ public class APICaller extends AsyncTask {
                     new_studyset.updated = studyset.get("updated").getAsString();
                     new_studyset.supported_language = new ArrayList<String>(Arrays.asList(studyset.get("supportedLanguages").getAsString().trim().split(",")));
                     new_studyset.highscore = 0;
-                    Log.i("STUDYSET",new_studyset.toString());
+//                    Log.i("STUDYSET",new_studyset.toString());
 
                     Iterator<JsonElement> cards = studyset.getAsJsonArray("cards").iterator();
                     while(cards.hasNext()){
@@ -186,7 +186,7 @@ public class APICaller extends AsyncTask {
                     new_scoreboard.setLang2(scoreboard.get("language2").getAsString());
                     new_scoreboard.setScore(scoreboard.get("score").getAsInt());
 
-                    Log.i("SCOREBOARD",new_scoreboard.toString());
+//                    Log.i("SCOREBOARD",new_scoreboard.toString());
                     get_scoreboards.add(new_scoreboard);
                 }
 
@@ -221,7 +221,7 @@ public class APICaller extends AsyncTask {
             wr.close();
 
             int status = urlConnection.getResponseCode();
-            Log.i("POST STATUS", status+"");
+//            Log.i("POST STATUS", status+"");
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

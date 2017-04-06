@@ -46,9 +46,9 @@ public class CardViewActivity extends AppCompatActivity {
         prepareLang();
 
         String android_id = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
-        Log.i("ANDROID_ID", "id: " + android_id);
-        Log.i("LANGUAGE", intent.getStringExtra(STUDYSET_SUPPORTED_LANGUAGES).replaceAll("\\s+",""));
-        Log.i("LANGUAGE", "lang1: "+ lang1 + ", lang2: " + lang2);
+//        Log.i("ANDROID_ID", "id: " + android_id);
+//        Log.i("LANGUAGE", intent.getStringExtra(STUDYSET_SUPPORTED_LANGUAGES).replaceAll("\\s+",""));
+//        Log.i("LANGUAGE", "lang1: "+ lang1 + ", lang2: " + lang2);
 
         this.getSupportActionBar().setTitle(studySetName);
 
@@ -65,7 +65,7 @@ public class CardViewActivity extends AppCompatActivity {
         prepareLang();
         cardAdapter.clear();
         List<Card> cards = getCards();
-        Log.i("CARD", "lang1: " + lang1 + ", lang2: " + lang2 + ", card-front: " + cards.get(0).first + "card-back: " + cards.get(0).second);
+//        Log.i("CARD", "lang1: " + lang1 + ", lang2: " + lang2 + ", card-front: " + cards.get(0).first + "card-back: " + cards.get(0).second);
         cardAdapter.addAll(cards);
         cardAdapter.notifyDataSetChanged();
     }
@@ -121,6 +121,9 @@ public class CardViewActivity extends AppCompatActivity {
     }
 
     public void prepareLang(){
+//        lang1 = "En";
+//        lang2 = "Jp";
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // first time in this page, no settings yet.
