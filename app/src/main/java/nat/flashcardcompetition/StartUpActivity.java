@@ -33,9 +33,11 @@ public class StartUpActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
         editor.putString("name", name);
         editor.putString("android_id", Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID));
-        editor.commit();
+        editor.apply();
 
         Intent intent = new Intent(this, StudysetViewActivity.class);
         startActivity(intent);

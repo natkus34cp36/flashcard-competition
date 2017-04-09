@@ -2,8 +2,10 @@ package nat.flashcardcompetition;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ public class StudysetViewActivity extends AppCompatActivity implements OnTaskCom
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_studyset_view);
+        this.getSupportActionBar().setTitle(PreferenceManager.getDefaultSharedPreferences(this).getString("name","AI FlashCard"));
 
         dbManager = new DBManager(this);
         dbManager.open();
@@ -42,6 +45,7 @@ public class StudysetViewActivity extends AppCompatActivity implements OnTaskCom
         }
 
         studysetAdapter = new StudysetAdapter(this, dbManager.getStudySet());
+
 
         ListView listView = (ListView) findViewById(R.id.studyset_listview);
         listView.setAdapter(studysetAdapter);

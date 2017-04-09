@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -57,6 +58,9 @@ public class CardSettingsActivity extends AppCompatActivity {
 
         int countFront = 0, countBack = 0;
         for(String lang :studySetSupportedLanguages){
+            Log.i("language", lang);
+            Log.i("language", studySetId+":front:"+lang + " --- " + sharedPreferences.getBoolean(studySetId+":front:"+lang, false));
+            Log.i("language", studySetId+":back:"+lang + " --- " + sharedPreferences.getBoolean(studySetId+":back:"+lang, false));
             if(sharedPreferences.getBoolean(studySetId+":front:"+lang, false)){
                 countFront++;
                 lang1 = lang;

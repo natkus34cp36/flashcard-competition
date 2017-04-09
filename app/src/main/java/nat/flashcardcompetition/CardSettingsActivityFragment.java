@@ -1,10 +1,12 @@
 package nat.flashcardcompetition;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -58,6 +60,9 @@ public class CardSettingsActivityFragment extends PreferenceFragment {
         getPreferenceScreen().addPreference(preferenceBackCategory);
 
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
         int n = studySetSupportedLanguages.length;
         for(int i = 0 ; i < n ; i++){
             CheckBoxPreference checkBoxPreference = new CheckBoxPreference(context);
@@ -66,6 +71,7 @@ public class CardSettingsActivityFragment extends PreferenceFragment {
             checkBoxPreference.setChecked(false);
             if(lang1.equals(studySetSupportedLanguages[i])){
                 checkBoxPreference.setChecked(true);
+                editor.putBoolean(studySetId+":front:"+studySetSupportedLanguages[i], true);
             }
             preferenceFrontCategory.addPreference(checkBoxPreference);
         }
@@ -77,9 +83,12 @@ public class CardSettingsActivityFragment extends PreferenceFragment {
             checkBoxPreference.setChecked(false);
             if(lang2.equals(studySetSupportedLanguages[i])){
                 checkBoxPreference.setChecked(true);
+                editor.putBoolean(studySetId+":back:"+studySetSupportedLanguages[i], true);
             }
             preferenceBackCategory.addPreference(checkBoxPreference);
         }
+
+        editor.apply();
     }
 
     public CardSettingsActivityFragment() {

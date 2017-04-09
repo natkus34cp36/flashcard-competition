@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.provider.Settings.Secure;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -45,13 +46,11 @@ public class CardViewActivity extends AppCompatActivity {
 
         prepareLang();
 
-        String android_id = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
-//        Log.i("ANDROID_ID", "id: " + android_id);
-//        Log.i("LANGUAGE", intent.getStringExtra(STUDYSET_SUPPORTED_LANGUAGES).replaceAll("\\s+",""));
-//        Log.i("LANGUAGE", "lang1: "+ lang1 + ", lang2: " + lang2);
-
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         this.getSupportActionBar().setTitle(studySetName);
 
+        TextView username = (TextView) findViewById(R.id.cardview_profile_textview);
+        username.setText(sharedPreferences.getString("name","Username"));
         cardAdapter = new CardAdapter(this,getCards()); // getCards() must be called after prepareLang().
 
         ListView listView = (ListView) findViewById(R.id.card_listview);
